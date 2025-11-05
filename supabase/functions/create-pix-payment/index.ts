@@ -25,6 +25,9 @@ serve(async (req) => {
 
     const accessToken = Deno.env.get('MERCADOPAGO_ACCESS_TOKEN');
     
+    // Generate unique idempotency key
+    const idempotencyKey = crypto.randomUUID();
+    
     // Create PIX payment in MercadoPago
     const paymentData = {
       transaction_amount: amount,
@@ -39,11 +42,14 @@ serve(async (req) => {
       },
     };
 
+    console.log('Creating PIX payment with idempotency key:', idempotencyKey);
+
     const response = await fetch('https://api.mercadopago.com/v1/payments', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
+        'X-Idempotency-Key': idempotencyKey,
       },
       body: JSON.stringify(paymentData),
     });
