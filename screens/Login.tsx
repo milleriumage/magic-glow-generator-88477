@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '@/hooks/useAuth';
 import { z } from 'zod';
 
 const emailSchema = z.string().email('Email inválido').trim();
